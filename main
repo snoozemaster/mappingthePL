@@ -17,8 +17,8 @@ class pl:
         print(self.name, self.address, self.lat_lan, self.rate)
 
 #구글 api daily사용제한때문에 over query limit 자꾸발생해서 코드가 잘안돌아갈수도..
-key_geo= 'AIzaSyCoOhwBmncu60owk9gUjyLkAYuupxZn7bw'
-key_gplace = 'AIzaSyBSyuRpXxJCPWIL2ZLU13sM6RBXo4xY97Y'
+key_geo= 'gep API 키입력'
+key_gplace = 'gplace API 키입력'
 pllist = []
 lat_lng_list = []
 namelist = []
