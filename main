@@ -1,0 +1,59 @@
+import urllib
+from bs4 import BeautifulSoup
+import geocoder
+import xlsxwriter
+import pandas as pd
+import folium
+import googlemaps
+from simplejson  import dumps
+import time
+
+class pl:
+    lat_lan = []
+    rate = ''
+    name = ''
+    address = ''
+    def showinfo(self):
+        print(self.name, self.address, self.lat_lan, self.rate)
+
+#구글 api daily사용제한때문에 over query limit 자꾸발생해서 코드가 잘안돌아갈수도..
+key_geo= 'AIzaSyCoOhwBmncu60owk9gUjyLkAYuupxZn7bw'
+key_gplace = 'AIzaSyBSyuRpXxJCPWIL2ZLU13sM6RBXo4xY97Y'
+pllist = []
+lat_lng_list = []
+namelist = []
+addresslist = []
+token=['']
+
+for i in range(0,10):   
+    targetUrl = "https://maps.googleapis.com/maps/api/place/textsearch/xml?query=restaurants+in+usa&key="+str(key_gplace)+"&pagetoken="+str(token[i-1])
+    html = urllib.request.urlopen(targetUrl).read()
+    soup = BeautifulSoup(html,'html.parser')
+    print(soup)
+    s_lat = soup.select('location > lat')
+    s_lng= soup.select('location > lng')
+    s_rate = soup.findAll('rating')
+    s_name = soup.findAll('name')
+    s_address = soup.findAll('formatted_address')
+    token_temp2 = soup.find('next_page_token')
+    print(token_temp2)
+    token_temp1 = token_temp2.getText()   
+    token.append(token_temp1)
+    print(token)
+    #print(len(s_lat), len(s_lng), len(s_name),len(s_address), token, s_rate)
+
+
+    for j in range(0, len(s_lat)):
+        pl1 = pl()
+        pl1.lat_lan = [s_lat[j].getText(),s_lng[j].getText()]
+        pl1.rate = s_rate[j].getText()
+        pl1.name = s_name[j].getText()
+        pl1.address = s_address[j].getText()
+        pllist.append(pl1)
+        #lat_lng_list.append([s_lat[j].getText(),s_lng[j].getText()])
+        #namelist.append(s_name[j].getText())
+        #addresslist.append(s_address[j].getText())
+    time.sleep(3)
+
+for x in range(0, len(pllist)):
+    print(pllist[x].name)
